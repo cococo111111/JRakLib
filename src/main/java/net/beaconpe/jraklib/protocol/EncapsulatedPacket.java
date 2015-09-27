@@ -69,7 +69,7 @@ public class EncapsulatedPacket
             offset = 9;
         } else
         {
-            length = Binary.readShort(Binary.subbytes(binary, 1, 2)) / 8;
+            length = (int) Math.ceil(Binary.readShort(Binary.subbytes(binary, 1, 2)) / 8.0);
             offset = 3;
             packet.identifierACK = -1;
         }
@@ -103,7 +103,8 @@ public class EncapsulatedPacket
             packet.splitIndex = Binary.readInt(Binary.subbytes(binary, offset, 4));
             offset = offset + 4;
         }
-        packet.buffer = Binary.subbytes(binary, offset, length);
+        packet.buffer = buffer(length);
+        binary.getBytes(offset, packet.buffer);
         offset = offset + length;
         packet.offset = offset;
         return packet;
